@@ -13,6 +13,7 @@ display_height = 600
 screen = py.display.set_mode((display_width,display_height))
 py.display.set_caption("Balloon Survey!")
 
+#lista de cores
 black = (0,0,0)
 white = (255,255,255)
 red = (200,0,0)
@@ -20,19 +21,25 @@ yellow = (200,200,0)#
 blue = (0,200,200)#
 purple = (139,0,139)#
 black = (0,0,0)#
+gray = (128,128,128)#
 green = (0,200,0)
 bright_red = (255,0,0)
 bright_green = (0,255,0)
 bright_blue= (0,255,255)#
 bright_yellow = (255,255,0)#
 bright_purple = (255,0,255)#
+bright_gray = (192,192,192)#
 
 bal_height = 80
 bal_width = 64
 clock = py.time.Clock()
-#Desktop - Trabalho
-agulha = py.image.load('C:\Ballooooon/PROJETO/imagens/agulha.png')
-balImg = py.image.load('C:\Ballooooon/PROJETO/imagens/balao-black.png')
+#Desktop - Trabalho - Abrindo em pen drive
+agulha = py.image.load('G:\PROJETO/imagens/agulha.png')
+balpreto = py.image.load('G:\PROJETO/imagens/balao-black.png')
+balvermelho = py.image.load('G:\PROJETO/imagens/balao-red.png')
+balazul = py.image.load('G:\PROJETO/imagens/balao-blue.png')
+balverde = py.image.load('G:\PROJETO/imagens/balao-green.png')
+balImg = balpreto
 #Windows
 #carImg = py.image.load('E:\Pygame_course/carrace.png')
 #Linux
@@ -105,26 +112,56 @@ def game_instruction():
         
         
         Text = py.font.SysFont('freesansbold.ttf',100)
-        Stext = py.font.SysFont('freesansbold.ttf',20)
+        Stext = py.font.SysFont('freesansbold.ttf',40)
         TextSurf, TextRec = text_objects("Instruções",Text)##################################
-        TextSurf1, TextRec1 = text_objects("Use as setas 'cima, baixo, esquerda, direita' para desviar dos objetos que caem randômicamente",Stext)
-        
+        TextSurf1, TextRec1 = text_objects("Use as setas 'cima, baixo, esquerda, direita'" ,Stext)
+        TextSurf2, TextRec2 = text_objects("para desviar das agulhas que vão cair randômicamente",Stext)
+        TextSurf3, TextRec3 = text_objects("ao longo do tempo de jogo.",Stext)
+        TextSurf4, TextRec4 = text_objects("A velocidade das agulhas aumenta gradativamente,",Stext)
+        TextSurf5, TextRec5 = text_objects("cuidado!",Stext)
+
+
         TextRec.center = ((display_width/2),(display_height/6))
-        TextRec1.center = ((display_width/3),(display_height/3))
+        TextRec1.center = ((display_width/2),(display_height/3))
+        TextRec2.center = ((display_width/2),((display_height/3)+30))
+        TextRec3.center = ((display_width/2),((display_height/3)+60))
+        TextRec4.center = ((display_width/2),((display_height/3)+120))
+        TextRec5.center = ((display_width/2),((display_height/3)+150))
+
 
         screen.blit(TextSurf, TextRec)
         screen.blit(TextSurf1, TextRec1)
+        screen.blit(TextSurf2, TextRec2)
+        screen.blit(TextSurf3, TextRec3)
+        screen.blit(TextSurf4, TextRec4)
+        screen.blit(TextSurf5, TextRec5)
 
 
+
+        button("Play",650,500,100,50, green, bright_green, game_loop)
         button("Back",50,500,100,50,purple,bright_purple,game_intro)
 
         #py.draw.rect(screen, red,(550,450,100,50))
 
         py.display.flip()
         clock.tick(15)
+
+def balblack():
+    balImg = balpreto
+    return game_customize()
+def balred():
+    balImg = balvermelho
+    return game_customize()
+def balgreen():
+    balImg = balverde        
+    return game_customize()
+def balblue():
+    balImg = balverde        
+    return game_customize()
+
 def game_customize():
     customize = True
-    while instruction:
+    while customize:
         for event in py.event.get():
             #print(event)
             if event.type == py.QUIT:
@@ -132,21 +169,24 @@ def game_customize():
                 quit()
 
         screen.fill(white)
-        largeText = py.font.Font('freesansbold.ttf', 115)
-        TextSurf, TextRec = text_objects("A Bit racey!", largeText)
-        TextRec.center = ((display_width/2),(display_height/2))
+        largeText = py.font.Font('freesansbold.ttf', 100)
+        TextSurf, TextRec = text_objects("Customização", largeText)
+        TextRec.center = ((display_width/2),(display_height/6))
         screen.blit(TextSurf, TextRec)
 
+        button("Cor preta",100,400,100,50, gray, bright_gray,balblack)#
+        button("Cor vermelha",250,400,150,50, red, bright_red,balred)#
+        button("Cor azul",450,400,100,50, blue, bright_blue,balblue)#
+        button("Cor verde",600,400,100,50, green, bright_green,balgreen)#
 
-        button("Go",150,450,100,50, green, bright_green, game_loop)
-        button("Instructions",350,450,100,50, yellow,bright_yellow,game_instruction)
-        button("Quit",550,450,100,50, red, bright_red, quitgame)
+
+        button("Play",650,500,100,50, green, bright_green, game_loop)
+        button("Back",50,500,100,50,purple,bright_purple,game_intro)
 
         #py.draw.rect(screen, red,(550,450,100,50))
 
         py.display.flip()
         clock.tick(15)
-    
 
 def quitgame():
     py.quit()
