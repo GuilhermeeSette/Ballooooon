@@ -27,11 +27,12 @@ bright_blue= (0,255,255)#
 bright_yellow = (255,255,0)#
 bright_purple = (255,0,255)#
 
-bal_width = 60
+bal_height = 80
+bal_width = 64
 clock = py.time.Clock()
 #Desktop - Trabalho
-agulha = py.image.load('G:\PROJETO/imagens/agulha.png')
-balImg = py.image.load('G:\PROJETO/imagens/balao-black.png')
+agulha = py.image.load('C:\Ballooooon/PROJETO/imagens/agulha.png')
+balImg = py.image.load('C:\Ballooooon/PROJETO/imagens/balao-black.png')
 #Windows
 #carImg = py.image.load('E:\Pygame_course/carrace.png')
 #Linux
@@ -90,6 +91,62 @@ def button(msg, x, y, w, h, ic, ac, action = None):
     textSurf, textRect = text_objects(msg, smallText)
     textRect.center = ( (x+(w/2)), (y+(h/2)) )
     screen.blit(textSurf, textRect)
+
+def game_instruction():
+    instruction = True
+    while instruction:
+        for event in py.event.get():
+            #print(event)
+            if event.type == py.QUIT:
+                py.quit()
+                quit()
+
+        screen.fill(white)
+        
+        
+        Text = py.font.SysFont('freesansbold.ttf',100)
+        Stext = py.font.SysFont('freesansbold.ttf',20)
+        TextSurf, TextRec = text_objects("Instruções",Text)##################################
+        TextSurf1, TextRec1 = text_objects("Use as setas 'cima, baixo, esquerda, direita' para desviar dos objetos que caem randômicamente",Stext)
+        
+        TextRec.center = ((display_width/2),(display_height/6))
+        TextRec1.center = ((display_width/3),(display_height/3))
+
+        screen.blit(TextSurf, TextRec)
+        screen.blit(TextSurf1, TextRec1)
+
+
+        button("Back",50,500,100,50,purple,bright_purple,game_intro)
+
+        #py.draw.rect(screen, red,(550,450,100,50))
+
+        py.display.flip()
+        clock.tick(15)
+def game_customize():
+    customize = True
+    while instruction:
+        for event in py.event.get():
+            #print(event)
+            if event.type == py.QUIT:
+                py.quit()
+                quit()
+
+        screen.fill(white)
+        largeText = py.font.Font('freesansbold.ttf', 115)
+        TextSurf, TextRec = text_objects("A Bit racey!", largeText)
+        TextRec.center = ((display_width/2),(display_height/2))
+        screen.blit(TextSurf, TextRec)
+
+
+        button("Go",150,450,100,50, green, bright_green, game_loop)
+        button("Instructions",350,450,100,50, yellow,bright_yellow,game_instruction)
+        button("Quit",550,450,100,50, red, bright_red, quitgame)
+
+        #py.draw.rect(screen, red,(550,450,100,50))
+
+        py.display.flip()
+        clock.tick(15)
+    
 
 def quitgame():
     py.quit()
@@ -179,71 +236,22 @@ def game_loop():
             thing_speed += 1
             #thing_width += (dodge * 1.2)
 
-        if y <= thing_starty + thing_height:
+##        if y < thing_starty + thing_height:
+##
+##
+##            if x >= thing_startx and x <= thing_startx + thing_width or x+bal_width  >= thing_startx and x + bal_width <= thing_startx+thing_width or x+(bal_width // 2) >= thing_startx and x + (bal_width // 2) <= thing_startx+thing_width:
+        if y <= thing_starty + thing_height and thing_starty <= y + bal_height:
+            #print("y cross")
 
-
-            if x >= thing_startx and x <= thing_startx + thing_width or x+bal_width  >= thing_startx and x + bal_width <= thing_startx+thing_width or x+(bal_width // 2) >= thing_startx and x + (bal_width // 2) <= thing_startx+thing_width:
-
+            if   thing_startx >= x and x + bal_width >= thing_startx or x+bal_width >= thing_startx and x + bal_width <= thing_startx+thing_width or x+(bal_width / 2) >= thing_startx and x+(bal_width / 2) <= thing_startx+thing_width :
                 crash()
+            else:
+                print(thing_startx, x)
 
 
         py.display.flip()
         clock.tick(60)
-def game_instruction():
-    instruction = True
-    while instruction:
-        for event in py.event.get():
-            #print(event)
-            if event.type == py.QUIT:
-                py.quit()
-                quit()
 
-        screen.fill(white)
-        
-        
-        Text = py.font.SysFont('freesansbold.ttf',100)
-        Stext = py.font.SysFont('freesansbold.ttf',20)
-        TextSurf, TextRec = text_objects("Instruções",Text)##################################
-        TextSurf1, TextRec1 = text_objects("Use as setas 'cima, baixo, esquerda, direita' para desviar dos objetos que caem randômicamente",Stext)
-        
-        TextRec.center = ((display_width/2),(display_height/6))
-        TextRec1.center = ((display_width/3),(display_height/3))
-
-        screen.blit(TextSurf, TextRec)
-        screen.blit(TextSurf1, TextRec1)
-
-
-        button("Back",50,500,100,50,purple,bright_purple,game_intro)
-
-        #py.draw.rect(screen, red,(550,450,100,50))
-
-        py.display.flip()
-        clock.tick(15)
-def game_customize():
-    customize = True
-    while instruction:
-        for event in py.event.get():
-            #print(event)
-            if event.type == py.QUIT:
-                py.quit()
-                quit()
-
-        screen.fill(white)
-        largeText = py.font.Font('freesansbold.ttf', 115)
-        TextSurf, TextRec = text_objects("A Bit racey!", largeText)
-        TextRec.center = ((display_width/2),(display_height/2))
-        screen.blit(TextSurf, TextRec)
-
-
-        button("Go",150,450,100,50, green, bright_green, game_loop)
-        button("Instructions",350,450,100,50, yellow,bright_yellow,game_instruction)
-        button("Quit",550,450,100,50, red, bright_red, quitgame)
-
-        #py.draw.rect(screen, red,(550,450,100,50))
-
-        py.display.flip()
-        clock.tick(15)
-    
 
     
 
