@@ -34,11 +34,12 @@ bal_height = 80
 bal_width = 64
 clock = py.time.Clock()
 #Desktop - Trabalho - Abrindo em pen drive
-agulha = py.image.load('G:\PROJETO/imagens/agulha.png')
-balpreto = py.image.load('G:\PROJETO/imagens/balao-black.png')
-balvermelho = py.image.load('G:\PROJETO/imagens/balao-red.png')
-balazul = py.image.load('G:\PROJETO/imagens/balao-blue.png')
-balverde = py.image.load('G:\PROJETO/imagens/balao-green.png')
+agulha = py.image.load('C:\Ballooooon/PROJETO/imagens/agulha.png')
+balpreto = py.image.load('C:\Ballooooon/PROJETO/imagens/balao-black.png')
+balvermelho = py.image.load('C:\Ballooooon/PROJETO/imagens/balao-red.png')
+balazul = py.image.load('C:\Ballooooon/PROJETO/imagens/balao-blue.png')
+balverde = py.image.load('C:\Ballooooon/PROJETO/imagens/balao-green.png')
+espinho = py.image.load('C:\Ballooooon/PROJETO/imagens/espinho.png')
 balImg = balpreto
 #Windows
 #carImg = py.image.load('E:\Pygame_course/carrace.png')
@@ -48,6 +49,10 @@ def things_dodge(count):
     font = py.font.SysFont(None, 25)
     text = font.render("Dodge: " + str(count), True, black)
     screen.blit(text,(0,0))
+
+def espinhos(x,y):
+    screen.blit(espinho,(x,y))
+    
 
 def things(thingx, thingy):
     screen.blit(agulha,(thingx,thingy))
@@ -148,16 +153,16 @@ def game_instruction():
 
 def balblack():
     balImg = balpreto
-    return game_customize()
+    return game_intro()
 def balred():
     balImg = balvermelho
-    return game_customize()
+    return game_loop()
 def balgreen():
     balImg = balverde        
-    return game_customize()
+    return game_intro()
 def balblue():
     balImg = balverde        
-    return game_customize()
+    return game_intro()
 
 def game_customize():
     customize = True
@@ -218,7 +223,11 @@ def game_intro():
         py.display.flip()
         clock.tick(15)
 
+
+    
+    
 def game_loop():
+
     x = (display_width * 0.45)
     y = (display_height * 0.8)
 
@@ -227,7 +236,7 @@ def game_loop():
     bal_speed = 0
     thing_startx = random.randrange(0, display_width)
     thing_starty = -600
-    thing_speed = 4
+    thing_speed = 10
     thing_width = 15
     thing_height = 70
     dodge = 0
@@ -241,9 +250,15 @@ def game_loop():
 
             if event.type == py.KEYDOWN:
                 if event.key == py.K_LEFT:
-                    x_change = -8
+                    if x <= 0:
+                        x_change = 0
+                    else:
+                        x_change = -8
                 elif event.key == py.K_RIGHT:
-                    x_change = 8
+                    if x >= display_width - bal_width:
+                        x_change = 0
+                    else:
+                        x_change = 8
                 elif event.key == py.K_UP:
                     y_change = -2
                 elif event.key == py.K_DOWN:
@@ -265,28 +280,73 @@ def game_loop():
         thing_starty += thing_speed
         bal(x,y)
         things_dodge(dodge)
-        if x > display_width - bal_width or x <= 0:
-            crash()
-
-
+        if x >= display_width - bal_width or x <= 0:
+            x_change = 0
+            #if x >= display_width - bal_width:
+                
+                            
         if thing_starty > display_height:
             thing_starty = 0 - thing_height
             thing_startx = random.randrange(0, display_width)
             dodge += 1
-            thing_speed += 1
+            #thing_speed += 1
             #thing_width += (dodge * 1.2)
 
-##        if y < thing_starty + thing_height:
-##
-##
-##            if x >= thing_startx and x <= thing_startx + thing_width or x+bal_width  >= thing_startx and x + bal_width <= thing_startx+thing_width or x+(bal_width // 2) >= thing_startx and x + (bal_width // 2) <= thing_startx+thing_width:
+
+        #Nível 2
+        if dodge > 10 and dodge<12:
+            largeText = py.font.Font('freesansbold.ttf', 115)
+            TextSurf, TextRec = text_objects('Nível 2!', largeText)
+            TextRec.center = ((display_width/2),(display_height/2))
+            screen.blit(TextSurf, TextRec)
+            py.display.flip()
+            
+            #time.sleep(1)
+            thing_speed = 13
+        #Nível 3
+        elif dodge > 20 and dodge < 22:
+            largeText = py.font.Font('freesansbold.ttf', 115)
+            TextSurf, TextRec = text_objects('Nível 3!', largeText)
+            TextRec.center = ((display_width/2),(display_height/2))
+            screen.blit(TextSurf, TextRec)
+            py.display.flip()
+            thing_speed = 16
+        #Nível 4
+        elif dodge > 30 and dodge < 32:
+            largeText = py.font.Font('freesansbold.ttf', 115)
+            TextSurf, TextRec = text_objects('Nível 4!', largeText)
+            TextRec.center = ((display_width/2),(display_height/2))
+            screen.blit(TextSurf, TextRec)
+            py.display.flip()
+            thing_speed = 20
+            if x >= display_width - bal_width or x <= 0:
+                crash()
+        #Nível 5
+        elif dodge > 40 and dodge < 42:
+            largeText = py.font.Font('freesansbold.ttf', 115)
+            TextSurf, TextRec = text_objects('Nível 5!', largeText)
+            TextRec.center = ((display_width/2),(display_height/2))
+            screen.blit(TextSurf, TextRec)
+            py.display.flip()
+            thing_speed = 25
+            if x >= display_width - bal_width or x <= 0:
+                crash()
+        #Nível 6
+        elif dodge > 40 and dodge < 42:
+            largeText = py.font.Font('freesansbold.ttf', 115)
+            TextSurf, TextRec = text_objects('Nível 6!', largeText)
+            TextRec.center = ((display_width/2),(display_height/2))
+            screen.blit(TextSurf, TextRec)
+            py.display.flip()
+            thing_speed = 35
+            if x >= display_width - bal_width or x <= 0:
+                crash()
         if y <= thing_starty + thing_height and thing_starty <= y + bal_height:
             #print("y cross")
 
             if   thing_startx >= x and x + bal_width >= thing_startx or x+bal_width >= thing_startx and x + bal_width <= thing_startx+thing_width or x+(bal_width / 2) >= thing_startx and x+(bal_width / 2) <= thing_startx+thing_width :
                 crash()
-            else:
-                print(thing_startx, x)
+
 
 
         py.display.flip()
