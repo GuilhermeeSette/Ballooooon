@@ -36,13 +36,12 @@ clock = py.time.Clock()
 #Desktop - Trabalho - Abrindo em pen drive
 agulha = py.image.load('E:\Ballooooon/PROJETO/imagens/agulha.png')
 balpreto = py.image.load('E:\Ballooooon/PROJETO/imagens/balao-black.png')
-bpreto = False
 balvermelho = py.image.load('E:\Ballooooon/PROJETO/imagens/balao-red.png')
-bred = False
 balazul = py.image.load('E:\Ballooooon/PROJETO/imagens/balao-blue.png')
 balverde = py.image.load('E:\Ballooooon/PROJETO/imagens/balao-green.png')
 espinho = py.image.load('E:\Ballooooon/PROJETO/imagens/espinho.png')
 balImg = balpreto
+
 #Windows
 #carImg = py.image.load('E:\Pygame_course/carrace.png')
 #Linux
@@ -59,8 +58,8 @@ def espinhos(x,y):
 def things(thingx, thingy):
     screen.blit(agulha,(thingx,thingy))
 
-def bal(balo,x,y):
-    screen.blit(balo,(x,y))
+def bal(x,y):
+    screen.blit(balImg,(x,y))
 
 def text_objects(text, font):
     textSurface = font.render(text, True, black)
@@ -157,21 +156,24 @@ def game_instruction():
         clock.tick(15)
 
 def balblack():
+    global balImg
     balImg = balpreto
-    bred = False
-    bpreto = True
-    return bpreto
+    return balImg
+
 def balred():
+    global balImg
     balImg = balvermelho
-    bpreto = False
-    bred = True
-    return bred
+    return balImg
+
 def balgreen():
-    balImg = balverde        
-    return game_intro()
+    global balImg
+    balImg = balverde
+    return balImg
+
 def balblue():
-    balImg = balverde        
-    return game_intro()
+    global balImg
+    balImg = balazul
+    return balImg
 
 def game_customize():
     customize = True
@@ -207,6 +209,7 @@ def quitgame():
     quit()
 
 def game_intro():
+    
     intro = True
     while intro:
         for event in py.event.get():
@@ -249,6 +252,7 @@ def game_loop():
     thing_width = 15
     thing_height = 70
     
+    
     dodge = 0
 
     gameExit = False
@@ -288,13 +292,8 @@ def game_loop():
         #things(thingx, thingy, thingw, thingh, color)
         things(thing_startx, thing_starty)
         thing_starty += thing_speed
-        if balred():
-            
-            bal(balvermelho,x,y)
-            
-        elif balblack():
-            bal(balpreto,x,y)
-            
+
+        bal(x,y)    
         things_dodge(dodge)
         if x >= display_width - bal_width or x <= 0:
             x_change = 0
