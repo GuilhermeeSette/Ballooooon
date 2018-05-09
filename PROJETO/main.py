@@ -39,7 +39,16 @@ balpreto = py.image.load('E:\Ballooooon/PROJETO/imagens/balao-black.png')
 balvermelho = py.image.load('E:\Ballooooon/PROJETO/imagens/balao-red.png')
 balazul = py.image.load('E:\Ballooooon/PROJETO/imagens/balao-blue.png')
 balverde = py.image.load('E:\Ballooooon/PROJETO/imagens/balao-green.png')
-espinho = py.image.load('E:\Ballooooon/PROJETO/imagens/espinho.png')
+#espinho = py.image.load('E:\Ballooooon/PROJETO/imagens/espinho.png')
+#movimento de balão em menus
+balgif1 = py.image.load('G:\Ballooooon/PROJETO/imagens/balgif1.png')
+balgif2 = py.image.load('G:\Ballooooon/PROJETO/imagens/balgif2.png')
+balgif3 = py.image.load('G:\Ballooooon/PROJETO/imagens/balgif3.png')
+balgif4 = py.image.load('G:\Ballooooon/PROJETO/imagens/balgif4.png')
+balgif5 = py.image.load('G:\Ballooooon/PROJETO/imagens/balgif5.png')
+balgif = balgif1
+balcont = 1
+#
 balImg = balpreto
 
 #Windows
@@ -186,9 +195,13 @@ def game_customize():
 
         screen.fill(white)
         largeText = py.font.Font('freesansbold.ttf', 100)
+        mediumText = py.font.Font('freesansbold.ttf',50)
         TextSurf, TextRec = text_objects("Customização", largeText)
+        TextSurf1, TextRec1 = text_objects("Customize a cor do seu balão!",mediumText)
         TextRec.center = ((display_width/2),(display_height/6))
+        TextRec1.center = ((display_width/2),(display_height/2))
         screen.blit(TextSurf, TextRec)
+        screen.blit(TextSurf1, TextRec1)
 
         button("Cor preta",100,400,100,50, gray, bright_gray,balblack)#
         button("Cor vermelha",250,400,150,50, red, bright_red,balred)#
@@ -209,6 +222,7 @@ def quitgame():
     quit()
 
 def game_intro():
+    balcont = 1
     
     intro = True
     while intro:
@@ -224,7 +238,28 @@ def game_intro():
         TextRec.center = ((display_width/2),(display_height/4))
         screen.blit(TextSurf, TextRec)
 
+        if balcont == 1:
+            balgif = balgif1
+        elif balcont == 2:
+            balgif = balgif2
+        elif balcont == 2:
+            balgif = balgif3
+        elif balcont == 2:
+            balgif = balgif4
+        elif balcont == 5:
+            balgif = balgif5
+            balcont = 0
 
+        balcont+=1
+        
+        screen.blit(balgif,(50,180))
+        screen.blit(balgif,(50,345))
+        screen.blit(balgif,(50,510))
+
+        screen.blit(balgif,(550,180))
+        screen.blit(balgif,(550,345))
+        screen.blit(balgif,(550,510))
+        
         button("Play",350,250,100,50, green, bright_green, game_loop)
         button("Customize",335,350,125,50,blue,bright_blue,game_customize)
         button("Instructions",325,450,150,50, yellow,bright_yellow,game_instruction)
