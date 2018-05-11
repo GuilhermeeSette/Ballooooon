@@ -61,8 +61,44 @@ balImg = balpreto
 #Linux
 #carImg = py.image.load('/media/guilherme/USB DISK/Pygame_course/carrace.png')
 
+#Input
+textinput = pygame_textinput.TextInput()
 
+def ranking():
+    texto = csv.reader(open("../Bas.csv","r"))
+    #for i in range(1,len(texto)-1,2):
+        
+        
+        
+def w_ranking(nome, dodge):
+    texto = csv.writer(open("../Bas.csv", "w"))
+    texto.writerow([nome,dodge])
     
+def r_ranking():
+  texto = csv.reader(open("../Bas.csv","r"))
+  for row in texto:
+    print(row)
+
+def input():
+    while True:
+        screen.fill((225, 225, 225))
+
+        events = pygame.event.get()
+        for event in events:
+            if event.type == pygame.QUIT:
+                exit()
+
+    # Feed it with events every frame
+    textinput.update(events)
+    # Blit its surface onto the screen
+    screen.blit(textinput.get_surface(), (10, 10))
+
+    if textinput.update(events):
+      nome = (textinput.get_text())
+
+    return nome
+
+
 def things_dodge(count):
     font = py.font.SysFont(None, 25)
     text = font.render("Dodge: " + str(count), True, black)
