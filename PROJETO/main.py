@@ -40,6 +40,11 @@ balvermelho = py.image.load('E:\Ballooooon/PROJETO/imagens/balao-red.png')
 balazul = py.image.load('E:\Ballooooon/PROJETO/imagens/balao-blue.png')
 balverde = py.image.load('E:\Ballooooon/PROJETO/imagens/balao-green.png')
 #espinho = py.image.load('E:\Ballooooon/PROJETO/imagens/espinho.png')
+#sons musicais
+py.mixer.init()
+py.mixer.music.load('E:\Ballooooon/PROJETO/music/OMFGDOGS.ogg')
+py.mixer.music.play(-1)
+
 #movimento de balão em menus
 balgif1 = py.image.load('E:\Ballooooon/PROJETO/imagens/balgif1.png')
 balgif2 = py.image.load('E:\Ballooooon/PROJETO/imagens/balgif2.png')
