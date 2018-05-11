@@ -34,18 +34,18 @@ bal_height = 80
 bal_width = 64
 clock = py.time.Clock()
 #Desktop - Trabalho - Abrindo em pen drive
-agulha = py.image.load('E:\Ballooooon/PROJETO/imagens/agulha.png')
+agulha = py.image.load('E:\Ballooooon/PROJETO/imagens/Agulha.png')
 balpreto = py.image.load('E:\Ballooooon/PROJETO/imagens/balao-black.png')
 balvermelho = py.image.load('E:\Ballooooon/PROJETO/imagens/balao-red.png')
 balazul = py.image.load('E:\Ballooooon/PROJETO/imagens/balao-blue.png')
 balverde = py.image.load('E:\Ballooooon/PROJETO/imagens/balao-green.png')
 #espinho = py.image.load('E:\Ballooooon/PROJETO/imagens/espinho.png')
 #movimento de balão em menus
-balgif1 = py.image.load('G:\Ballooooon/PROJETO/imagens/balgif1.png')
-balgif2 = py.image.load('G:\Ballooooon/PROJETO/imagens/balgif2.png')
-balgif3 = py.image.load('G:\Ballooooon/PROJETO/imagens/balgif3.png')
-balgif4 = py.image.load('G:\Ballooooon/PROJETO/imagens/balgif4.png')
-balgif5 = py.image.load('G:\Ballooooon/PROJETO/imagens/balgif5.png')
+balgif1 = py.image.load('E:\Ballooooon/PROJETO/imagens/balgif1.png')
+balgif2 = py.image.load('E:\Ballooooon/PROJETO/imagens/balgif2.png')
+balgif3 = py.image.load('E:\Ballooooon/PROJETO/imagens/balgif3.png')
+balgif4 = py.image.load('E:\Ballooooon/PROJETO/imagens/balgif4.png')
+balgif5 = py.image.load('E:\Ballooooon/PROJETO/imagens/balgif5.png')
 balgif = balgif1
 balcont = 1
 #
@@ -236,10 +236,7 @@ def game_intro():
                 quit()
 
         screen.fill(white)
-        largeText = py.font.Font('freesansbold.ttf', 95)
-        TextSurf, TextRec = text_objects("Balloon Survey!", largeText)
-        TextRec.center = ((display_width/2),(display_height/4))
-        screen.blit(TextSurf, TextRec)
+        
 
         if balcont == 1:
             balgif = balgif1
@@ -254,14 +251,20 @@ def game_intro():
             balcont = 0
 
         balcont+=1
-        
+        screen.blit(balgif,(50,15))
         screen.blit(balgif,(50,180))
         screen.blit(balgif,(50,345))
         screen.blit(balgif,(50,510))
-
+        
+        screen.blit(balgif,(550,15))
         screen.blit(balgif,(550,180))
         screen.blit(balgif,(550,345))
         screen.blit(balgif,(550,510))
+
+        largeText = py.font.Font('freesansbold.ttf', 95)
+        TextSurf, TextRec = text_objects("Balloon Survey!", largeText)
+        TextRec.center = ((display_width/2),(display_height/4))
+        screen.blit(TextSurf, TextRec)
         
         button("Play",350,250,100,50, green, bright_green, game_loop)
         button("Customize",335,350,125,50,blue,bright_blue,game_customize)
@@ -399,62 +402,7 @@ def game_loop():
 
             if   thing_startx >= x and x + bal_width >= thing_startx or x+bal_width >= thing_startx and x + bal_width <= thing_startx+thing_width or x+(bal_width / 2) >= thing_startx and x+(bal_width / 2) <= thing_startx+thing_width :
                 crash()
-        def pow_e(posx,posy):
-            circ = py.draw.circle(screen, (0,0,255), (posx, posy), 5)
-            if y <= posy + 10 and posy <= y + bal_height:
-                    #print("y cross")
 
-                    if   posx >= x and x + bal_width >= posx or x+bal_width >= posx and x + bal_width <= posx+10 or x+(bal_width / 2) >= posx and x+(bal_width / 2) <= posx+10 :
-                        escudo()
-                        
-        def pow_c(posx, posy):
-            circ = py.draw.circle(screen, (0,0,0), (posx, posy), 5)
-            if y <= posy + 10 and posy <= y + bal_height:
-                    #print("y cross")
-
-                if   posx >= x and x + bal_width >= posx or x+bal_width >= posx and x + bal_width <= posx+10 or x+(bal_width / 2) >= posx and x+(bal_width / 2) <= posx+10 :
-                    cresce()
-
-        def pow_m(posx, posy):
-            circ = py.draw.circle(screen, (0,255,0), (posx, posy), 5)
-            if y <= posy + 10 and posy <= y + bal_height:
-                    #print("y cross")
-
-                if   posx >= x and x + bal_width >= posx or x+bal_width >= posx and x + bal_width <= posx+10 or x+(bal_width / 2) >= posx and x+(bal_width / 2) <= posx+10 :
-                    mini()
-                        
-        def cresce():
-          global balImg
-          balImg = balazul
-          
-
-
-        def mini():
-          global balImg
-          balImg = balverde
-          
-
-        def escudo():
-          for i in range(dodge,dodge + 10,1):
-            if y <= thing_starty + thing_height and thing_starty <= y + bal_height:
-                    #print("y cross")
-
-                    if   thing_startx >= x and x + bal_width >= thing_startx or x+bal_width >= thing_startx and x + bal_width <= thing_startx+thing_width or x+(bal_width / 2) >= thing_startx and x+(bal_width / 2) <= thing_startx+thing_width :
-                        print('Funcionou!')
-
-        def gad():
-          power = random.randint(1,3)
-          posx = random.randint(0,800)
-          posy = random.randint(0,600)
-          if power == 1:
-            pow_m(posx,posy)
-          elif power == 2:
-            pow_e(posx,posy)
-          elif power == 3:
-            pow_c(posx,posy)
-
-        if dodge > 2 != 0 and dodge < 10 != 0:
-            gad()
         py.display.flip()
         clock.tick(60)
 
