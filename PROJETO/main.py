@@ -64,20 +64,17 @@ balImg = balpreto
 #Input
 textinput = pygame_textinput.TextInput()
 
-def ranking():
-    texto = csv.reader(open("../Bas.csv","r"))
-    #for i in range(1,len(texto)-1,2):
-        
-        
-        
 def w_ranking(nome, dodge):
-    texto = csv.writer(open("../Bas.csv", "w"))
-    texto.writerow([nome,dodge])
+    with open(r'Bas.csv','a') as data:
     
+        writer = csv.writer(data)
+        writer.writerow([nome,dodge])
+
 def r_ranking():
-  texto = csv.reader(open("../Bas.csv","r"))
+  texto = csv.reader(open("Bas.csv","r"))
   for row in texto:
     print(row)
+
 
 def input():
     while True:
