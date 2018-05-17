@@ -18,12 +18,14 @@ while True:
             exit()
 
     # Feed it with events every frame
-    textinput.update(events)
+    #textinput.update(events)
     # Blit its surface onto the screen
     screen.blit(textinput.get_surface(), (10, 10))
 
-    if textinput.update(events):
-      print(textinput.get_text())
-
     pygame.display.update()
     clock.tick(30)
+
+    if textinput.update(events):
+         nome = textinput.get_text()
+
+    

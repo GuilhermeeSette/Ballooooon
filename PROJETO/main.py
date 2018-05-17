@@ -1,7 +1,8 @@
-
+import pygame_textinput
 import pygame as py
 import time
 import random
+import csv
 #py.display.init()
 #py.font.init()
 
@@ -34,23 +35,24 @@ bal_height = 80
 bal_width = 64
 clock = py.time.Clock()
 #Desktop - Trabalho - Abrindo em pen drive
-agulha = py.image.load('E:\Ballooooon/PROJETO/imagens/Agulha.png')
-balpreto = py.image.load('E:\Ballooooon/PROJETO/imagens/balao-black.png')
-balvermelho = py.image.load('E:\Ballooooon/PROJETO/imagens/balao-red.png')
-balazul = py.image.load('E:\Ballooooon/PROJETO/imagens/balao-blue.png')
-balverde = py.image.load('E:\Ballooooon/PROJETO/imagens/balao-green.png')
+agulha = py.image.load('Ballooooon/PROJETO/imagens/Agulha.png')
+balpreto = py.image.load('Ballooooon/PROJETO/imagens/balao-black.png')
+balvermelho = py.image.load('Ballooooon/PROJETO/imagens/balao-red.png')
+balazul = py.image.load('Ballooooon/PROJETO/imagens/balao-blue.png')
+balverde = py.image.load('Ballooooon/PROJETO/imagens/balao-green.png')
 #espinho = py.image.load('E:\Ballooooon/PROJETO/imagens/espinho.png')
 #sons musicais
+dodge = 0
 py.mixer.init()
-py.mixer.music.load('E:\Ballooooon/PROJETO/music/OMFGDOGS.ogg')
+py.mixer.music.load('Ballooooon/PROJETO/music/OMFGDOGS.ogg')
 py.mixer.music.play(-1)
 
 #movimento de balão em menus
-balgif1 = py.image.load('E:\Ballooooon/PROJETO/imagens/balgif1.png')
-balgif2 = py.image.load('E:\Ballooooon/PROJETO/imagens/balgif2.png')
-balgif3 = py.image.load('E:\Ballooooon/PROJETO/imagens/balgif3.png')
-balgif4 = py.image.load('E:\Ballooooon/PROJETO/imagens/balgif4.png')
-balgif5 = py.image.load('E:\Ballooooon/PROJETO/imagens/balgif5.png')
+balgif1 = py.image.load('Ballooooon/PROJETO/imagens/balgif1.png')
+balgif2 = py.image.load('Ballooooon/PROJETO/imagens/balgif2.png')
+balgif3 = py.image.load('Ballooooon/PROJETO/imagens/balgif3.png')
+balgif4 = py.image.load('Ballooooon/PROJETO/imagens/balgif4.png')
+balgif5 = py.image.load('Ballooooon/PROJETO/imagens/balgif5.png')
 balgif = balgif1
 balcont = 1
 #
@@ -66,7 +68,7 @@ textinput = pygame_textinput.TextInput()
 
 def w_ranking(nome, dodge):
     with open(r'Bas.csv','a') as data:
-    
+
         writer = csv.writer(data)
         writer.writerow([nome,dodge])
 
@@ -77,21 +79,48 @@ def r_ranking():
 
 
 def input():
-    while True:
-        screen.fill((225, 225, 225))
+    #py.init()
 
-        events = pygame.event.get()
+# Create TextInput-object
+    #textinput = pygame_textinput.TextInput()
+
+    scree = py.display.set_mode((800, 600))
+    clock = py.time.Clock()
+
+    while True:
+        nome = ''
+        scree.fill((225, 225, 225))
+
+        largeText = py.font.Font('freesansbold.ttf', 60)
+        TextSurf, TextRec = text_objects("Digite seu nome", largeText)
+        TextRec.center = ((display_width/2),(display_height/2))
+        screen.blit(TextSurf, TextRec)
+        py.display.flip()
+
+        events = py.event.get()
         for event in events:
-            if event.type == pygame.QUIT:
+            if event.type == py.QUIT:
                 exit()
 
-    # Feed it with events every frame
-    textinput.update(events)
-    # Blit its surface onto the screen
-    screen.blit(textinput.get_surface(), (10, 10))
+        # Feed it with events every frame
+        #textinput.update(events)
+        # Blit its surface onto the screen
+        scree.blit(textinput.get_surface(), (10, 10))
 
-    if textinput.update(events):
-      nome = (textinput.get_text())
+        if textinput.update(events):
+            nome = (textinput.get_text())
+            w_ranking(nome, dodge)
+            r_ranking()
+        for event in events:
+            if event.type == py.KEYDOWN:
+                if event.key == py.K_RETURN:
+                    game_intro()
+
+        py.display.update()
+        clock.tick(30)
+
+
+
 
     return nome
 
@@ -103,7 +132,7 @@ def things_dodge(count):
 
 def espinhos(x,y):
     screen.blit(espinho,(x,y))
-    
+
 
 def things(thingx, thingy):
     screen.blit(agulha,(thingx,thingy))
@@ -124,7 +153,7 @@ def message_display(text):
 
     time.sleep(2)
 
-    game_intro()
+    nome = input()
 
 def crash():
     message_display("You Crashed!")
@@ -168,8 +197,8 @@ def game_instruction():
                 quit()
 
         screen.fill(white)
-        
-        
+
+
         Text = py.font.SysFont('freesansbold.ttf',100)
         Stext = py.font.SysFont('freesansbold.ttf',40)
         TextSurf, TextRec = text_objects("Instruções",Text)##################################
@@ -263,8 +292,9 @@ def quitgame():
     quit()
 
 def game_intro():
+
     balcont = 1
-    
+
     intro = True
     while intro:
         for event in py.event.get():
@@ -274,7 +304,7 @@ def game_intro():
                 quit()
 
         screen.fill(white)
-        
+
 
         if balcont == 1:
             balgif = balgif1
@@ -293,7 +323,7 @@ def game_intro():
         screen.blit(balgif,(50,180))
         screen.blit(balgif,(50,345))
         screen.blit(balgif,(50,510))
-        
+
         screen.blit(balgif,(550,15))
         screen.blit(balgif,(550,180))
         screen.blit(balgif,(550,345))
@@ -303,7 +333,7 @@ def game_intro():
         TextSurf, TextRec = text_objects("Balloon Survey!", largeText)
         TextRec.center = ((display_width/2),(display_height/4))
         screen.blit(TextSurf, TextRec)
-        
+
         button("Play",350,250,100,50, green, bright_green, game_loop)
         button("Customize",335,350,125,50,blue,bright_blue,game_customize)
         button("Instructions",325,450,150,50, yellow,bright_yellow,game_instruction)
@@ -315,9 +345,11 @@ def game_intro():
         clock.tick(15)
 
 
-    
-    
+
+
 def game_loop():
+
+    global dodge
 
     x = (display_width * 0.45)
     y = (display_height * 0.8)
@@ -330,9 +362,9 @@ def game_loop():
     thing_speed = 10
     thing_width = 15
     thing_height = 70
-    
-    
-    dodge = 0
+
+
+
 
     gameExit = False
     while not gameExit:
@@ -372,16 +404,17 @@ def game_loop():
         things(thing_startx, thing_starty)
         thing_starty += thing_speed
 
-        bal(x,y)    
+        bal(x,y)
         things_dodge(dodge)
         if x >= display_width - bal_width or x <= 0:
             x_change = 0
             #if x >= display_width - bal_width:
-                
-                            
+
+
         if thing_starty > display_height:
             thing_starty = 0 - thing_height
             thing_startx = random.randrange(0, display_width)
+            #global dodge
             dodge += 1
             #thing_speed += 1
             #thing_width += (dodge * 1.2)
@@ -394,7 +427,7 @@ def game_loop():
             TextRec.center = ((display_width/2),(display_height/2))
             screen.blit(TextSurf, TextRec)
             py.display.flip()
-            
+
             #time.sleep(1)
             thing_speed = 13
         #Nível 3
@@ -445,7 +478,7 @@ def game_loop():
         clock.tick(60)
 
 
-    
+
 
 
 
