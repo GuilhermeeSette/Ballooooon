@@ -2,6 +2,7 @@ import pygame_textinput #importando arquivo para poder fazer o input para o rank
 import pygame as py
 import time #importa tempo para regular a velocidade do jogo
 import random #importa random para randomizar a queda de objetos no jogo
+import math #importa a biblioteca de matematica para o temporizador no jogo
 import csv #importa arquivo para guardar o ranking
 
 py.init()#Inicia pygame
@@ -44,6 +45,7 @@ ceuranking = py.image.load('../PROJETO/imagens/ceuranking.jpg')#importa imagem p
 ceuinst = py.image.load('../PROJETO/imagens/ceuinst.png')#importa a imagem para fundo de tela de instruções
 ceucustomize = py.image.load('../PROJETO/imagens/ceucustomize.png')#importa a imagem para fundo de tela de customização
 ceujogo = py.image.load('../PROJETO/imagens/ceujogo.png')#importa a imagem para fundo de tela de jogo
+ceurank2 = py.image.load('../PROJETO/imagens/ceurank2.png')
 #sons musicais
 dodge = 0 #varíavel para contar quantos objetos desviados
 py.mixer.init() #inicia a função para música do jogo
@@ -89,6 +91,9 @@ def ranking():
                 quit()
 
         screen.fill(white)
+        screen.blit(ceurank2,(0,0))
+
+
 
         largeText = py.font.Font('freesansbold.ttf', 95)
         TextSurf, TextRec = text_objects("Ranking", largeText)
@@ -178,9 +183,8 @@ def input():#função para chamar a tela onde será colocado o seu nome
 
 def things_dodge(count):#função para mostrar na tela quantas coisas você desviou
     font = py.font.SysFont(None, 25)#tamanho da fonte ao ser usada
-    text = font.render("Dodge: " + str(count), True, black)#texto para ser renderizado com base na variavel count, com contorno e de cor preta
+    text = font.render("Dodge: " + str(count), True, black)#texto para ser renderizado com base na variavel count (pontuação), com contorno e de cor preta
     screen.blit(text,(0,0))#renderização do texto na tela
-
 
 def things(thingx, thingy):#função para renderizar a agulha. Chamamos a agulha de 'thing' no código
     screen.blit(agulha,(thingx,thingy))#renderização da agulha com seu x e y
@@ -419,7 +423,12 @@ def game_loop():#o loop do jogo
     thing_speed = 10 #velocidade da agulha
     thing_width = 15 #largura da agulha
     thing_height = 70 #altura da agulha
+    timer = 0# Um timer começando do zero
 
+    segundos = 0
+    segundos -=clock.tick()#zerando o clock tick para o timer
+    timer = 0
+    displaytimer = 0
 
 
 
@@ -463,6 +472,19 @@ def game_loop():#o loop do jogo
 
         bal(x,y)# chama função para renderizar
         things_dodge(dodge)# função para renderizar pontuação
+
+
+        
+
+        #Incremento de tempo
+        segundos = clock.tick()/460.0 # É um numero float. Por isso '.0'
+        timer += segundos
+        displaytimer = math.trunc(timer)
+        
+        #Sem chamar uma função para o tempo a renderização é feita dentro do próprio loop de jogo
+        fontimer = py.font.SysFont(None,25)#tamanho da fonte do timer
+        textimer = fontimer.render("Timer: " + str(displaytimer), True, black)#texto para ser renderizado com base no tempo
+        screen.blit(textimer,(700,0))
 
         if x >= display_width - bal_width or x <= 0: #não deixa o balão passar para fora da tela
             x_change = 0#
@@ -533,11 +555,15 @@ def game_loop():#o loop do jogo
 #'Ou' a posição x + a largura do balão dividida por 2 maior que o começo da agulha
 #'E' a posição x + a largura do balão dividida por 2 menor que o começo da agulha+ sua largura: chama a função de colisão
             if   thing_startx >= x and x + bal_width >= thing_startx or x+bal_width >= thing_startx and x + bal_width <= thing_startx+thing_width or x+(bal_width / 2) >= thing_startx and x+(bal_width / 2) <= thing_startx+thing_width :
+
                 crash()
-                dodge = 0
+                dodge = 0#reseta a pontuação
+                timer -= clock.tick()#reseta timer
+                clock.reset()
+                displaytimer -=displaytimer
 
         py.display.flip()
-        clock.tick(60)
+        clock.tick(100)
 
 
 
