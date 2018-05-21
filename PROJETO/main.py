@@ -1,5 +1,5 @@
 import pygame_textinput #importando arquivo para poder fazer o input para o ranking
-import pygame as py 
+import pygame as py
 import time #importa tempo para regular a velocidade do jogo
 import random #importa random para randomizar a queda de objetos no jogo
 import csv #importa arquivo para guardar o ranking
@@ -29,7 +29,7 @@ bright_purple = (255,0,255)
 bright_gray = (192,192,192)
 #Medida do balão
 bal_height = 80
-bal_width = 64
+bal_width = 66
 
 clock = py.time.Clock()#Varíavel para armazenar a função de tempo do pygame e para framerate do jogo
 #Desktop - Trabalho - Abrindo em pen drive
@@ -62,11 +62,65 @@ balImg = balpreto#varíavel para carregar uma imagem padrão de balão preto
 #Input
 textinput = pygame_textinput.TextInput()#variavel para texto
 
+def ranking():
+
+    texto = csv.reader(open("Bas.csv","r"))
+    fhand = []
+    for i in texto:
+        if len(i) == 0: continue
+        fhand.append(i)
+    for num in fhand:
+        num[0] = int(num[0])
+
+
+        #print(num)
+    fhand.sort(reverse = True)
+    for j in fhand:
+        print(j)
+
+
+
+    ranking = True
+    while ranking:
+        for event in py.event.get():
+            #print(event)
+            if event.type == py.QUIT:
+                py.quit()
+                quit()
+
+        screen.fill(white)
+
+        largeText = py.font.Font('freesansbold.ttf', 95)
+        TextSurf, TextRec = text_objects("Ranking", largeText)
+        TextRec.center = ((display_width/2),60)
+        screen.blit(TextSurf, TextRec)
+        disp = 200
+        if len(fhand) < 5:
+
+            for line in range(0,len(fhand) -1,1):
+                largeText = py.font.Font('freesansbold.ttf', 20)
+                TextSurf, TextRec = text_objects(str(fhand[line]), largeText)
+                TextRec.center = ((display_width/2),disp)
+                screen.blit(TextSurf, TextRec)
+                disp += 30
+        else:
+            for line in range(0,5,1):
+                largeText = py.font.Font('freesansbold.ttf', 20)
+                TextSurf, TextRec = text_objects(str(fhand[line]), largeText)
+                TextRec.center = ((display_width/2),disp)
+                screen.blit(TextSurf, TextRec)
+                disp += 30
+
+        button("Play",650,500,100,50, green, bright_green, game_loop)
+        button("Menu",50,500,100,50,purple,bright_purple,game_intro)
+        py.display.flip()
+
+
 def w_ranking(nome, dodge):#função para escrever pontos
     with open(r'Bas.csv','a') as data:#abre arquivo csv como dados
 
         writer = csv.writer(data)#define variavel para escrever dados
-        writer.writerow([nome,dodge])#escreve variavel com nome do jogador e pontos desviados
+        writer.writerow([dodge,nome])#escreve variavel com nome do jogador e pontos desviados
 
 def r_ranking():#função para ler o arquivo
   texto = csv.reader(open("Bas.csv","r"))#abre arquivo
@@ -77,12 +131,12 @@ def r_ranking():#função para ler o arquivo
 def input():#função para chamar a tela onde será colocado o seu nome
     scree = py.display.set_mode((800, 600))#outro display com mesmas proporções
     clock = py.time.Clock()#clock de novo para framerate
-    
+
     while True:#ciclo para input de nome
         nome = ''#variavel com nome vazio para input
         scree.fill((225, 225, 225))#preenche tela com branco
         screen.blit(ceuranking,(0,0))#carrega imagem de fundo para o ranking
-        
+
         largeText = py.font.Font('freesansbold.ttf', 60)#variavel para fonte de texto
         TextSurf, TextRec = text_objects("Digite seu nome", largeText)#Duas variaveis sendo definidas pela função text_objects
         TextRec.center = ((display_width/2),(display_height/2))#centraliza o texto
@@ -97,24 +151,29 @@ def input():#função para chamar a tela onde será colocado o seu nome
 
         # Atualiza o texto na superficie da tela
         scree.blit(textinput.get_surface(), (10, 10))#input de texto com posição
-        
+
         if textinput.update(events):#evento chamado para input do nome
             nome = (textinput.get_text())#pega o input do nome
             w_ranking(nome, dodge)#chama função para escrever ranking
             r_ranking()#chama função para ler o ranking
-            
+
         for event in events:#um laço for para digitar
             if event.type == py.KEYDOWN:#caso uma tecla seja pressionada para escrever o nome
                 if event.key == py.K_RETURN:#depois de escrever o nome
-                    game_intro()#chama a funçao de menu
+                    continue#ranking()#chama a funçao de Ranking
+            if event.type == py.KEYUP:#caso uma tecla seja pressionada para escrever o nome
+                if event.key == py.K_RETURN:
+                    ranking()
 
-        
+
+
+
         py.display.update()#da update na tela para escrever o nome
         clock.tick(30)#frames da tela de ranking
 
 
 
-    return nome#retorna a variavel nome armazenada para o ranking
+    #return nome#retorna a variavel nome armazenada para o ranking
 
 
 def things_dodge(count):#função para mostrar na tela quantas coisas você desviou
@@ -156,7 +215,7 @@ def button(msg, x, y, w, h, ic, ac, action = None):#ic é caso o mouse não este
 
     #se o clique esquerdo estiver entre a posição x do mouse+ largura do botão e a posição x do mouse
     if x+w > mouse[0] > x and y+h > mouse[1] > y:# e o clique direito estiver entre posição y+altura e a posição y
-        
+
         py.draw.rect(screen, ac,(x,y,w,h))#botão desenhado se o mouse estiver em cima usando a variavel 'ac'.
         #AS VARIAVEIS 'AC' E 'IC' SERVEM PARA MUDAR A COR DO BOTÃO CASO O MOUSE
         if click[0] == 1 and action != None:# e for clicado com o botão esquerdo
@@ -224,13 +283,13 @@ def game_instruction():#função para a pagina instrução
         #botões para jogar e voltar na tela de introdução
 
         py.display.flip()#atualização da tela
-        clock.tick(15)#frames da tela
+        clock.tick(30)#frames da tela
 
 #lista de funções para selecionar a cor do balão
 def balblack():#balão preto
     global balImg #variavel global em todas as funções para poder mudar a variavel 'balImg' com a cor desejada
     balImg = balpreto
-    return balImg #retorna a variavel base de imagem do balão 
+    return balImg #retorna a variavel base de imagem do balão
 
 def balred():#balão vemelho
     global balImg
@@ -258,7 +317,7 @@ def game_customize():#função para a pagina de customização
 
         screen.fill(white)
         screen.blit(ceucustomize,(0,0))
-                    
+
         largeText = py.font.Font('freesansbold.ttf', 100) #fontes para textos com tamanhos diferentes
         mediumText = py.font.Font('freesansbold.ttf',50)
 
@@ -281,7 +340,7 @@ def game_customize():#função para a pagina de customização
         button("Back",50,500,100,50,purple,bright_purple,game_intro)
 
         py.display.flip()
-        clock.tick(15)
+        clock.tick(30)
 
 def quitgame():#função para sair do jogo normalmente chamada em botões
     py.quit()
@@ -339,7 +398,7 @@ def game_intro():#função para o menu de introdução
 
 
         py.display.flip()
-        clock.tick(15)
+        clock.tick(30)
 
 
 
@@ -347,11 +406,11 @@ def game_intro():#função para o menu de introdução
 def game_loop():#o loop do jogo
 
     global dodge #deixando a variavel dodge em global para ser usada em outras funções como ranking
-
+    dodge = 0
     x = (display_width * 0.45)# tamanho do balão
     y = (display_height * 0.8)
 
-    #variaveis 
+    #variaveis
     x_change = 0 #mudança de x do balão
     y_change = 0 #mudança de y do balão
     bal_speed = 0 #velocidade do balão
@@ -467,14 +526,15 @@ def game_loop():#o loop do jogo
         if y <= thing_starty + thing_height and thing_starty <= y + bal_height:
             #print("y cross")
 #um if para colisão.
-#Se o começo de x da agulha for maior que a posição x de movimento do balão + largura do balão 
-#'E' a posição 'x' de movimento '+' a largura do balão forem maiores que o começo x da agulha 
+#Se o começo de x da agulha for maior que a posição x de movimento do balão + largura do balão
+#'E' a posição 'x' de movimento '+' a largura do balão forem maiores que o começo x da agulha
 #'Ou' a posição x + a largura do balão maior que o começo da agulha
 #'E' a posição x + a largura do balão menor que o começo da agulha + sua largura
 #'Ou' a posição x + a largura do balão dividida por 2 maior que o começo da agulha
 #'E' a posição x + a largura do balão dividida por 2 menor que o começo da agulha+ sua largura: chama a função de colisão
             if   thing_startx >= x and x + bal_width >= thing_startx or x+bal_width >= thing_startx and x + bal_width <= thing_startx+thing_width or x+(bal_width / 2) >= thing_startx and x+(bal_width / 2) <= thing_startx+thing_width :
                 crash()
+                dodge = 0
 
         py.display.flip()
         clock.tick(60)
