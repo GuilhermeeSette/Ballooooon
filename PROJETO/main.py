@@ -183,7 +183,7 @@ def input():#função para chamar a tela onde será colocado o seu nome
 
 def things_dodge(count):#função para mostrar na tela quantas coisas você desviou
     font = py.font.SysFont(None, 25)#tamanho da fonte ao ser usada
-    text = font.render("Dodge: " + str(count), True, black)#texto para ser renderizado com base na variavel count (pontuação), com contorno e de cor preta
+    text = font.render("Score: " + str(count), True, black)#texto para ser renderizado com base na variavel count (pontuação), com contorno e de cor preta
     screen.blit(text,(0,0))#renderização do texto na tela
 
 def things(thingx, thingy):#função para renderizar a agulha. Chamamos a agulha de 'thing' no código
@@ -209,7 +209,7 @@ def message_display(text):#função de mensagem que recebe texto
     nome = input()#chama o input
 
 def crash():#função para mostrar uma mensagem ao chamar a função de mensagem
-    message_display("You Crashed!")#texto dentro da função de mensagem para ser definido como a variavel text
+    message_display("Game Over!")#texto dentro da função de mensagem para ser definido como a variavel text
 
 
 #função botão que recebe mensagem, posição de mouse(x,y), largura e altura do botão que será um retangulo,ic é caso o mouse não esteja em cima do botão, e uma ação que podera chamar funções
