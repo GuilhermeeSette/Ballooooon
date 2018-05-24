@@ -46,6 +46,7 @@ ceuinst = py.image.load('../PROJETO/imagens/ceuinst.png')#importa a imagem para 
 ceucustomize = py.image.load('../PROJETO/imagens/ceucustomize.png')#importa a imagem para fundo de tela de customização
 ceujogo = py.image.load('../PROJETO/imagens/ceujogo.png')#importa a imagem para fundo de tela de jogo
 ceurank2 = py.image.load('../PROJETO/imagens/ceurank2.png')
+ceucreditos = py.image.load('../PROJETO/imagens/ceucreditos.png')
 #sons musicais
 dodge = 0 #varíavel para contar quantos objetos desviados
 py.mixer.init() #inicia a função para música do jogo
@@ -346,6 +347,43 @@ def game_customize():#função para a pagina de customização
         py.display.flip()
         clock.tick(30)
 
+
+def game_creditos():#função para créditos
+    creditos = True
+    while creditos:
+        for event in py.event.get():
+            if event.type == py.QUIT:
+                py.quit()
+                quit()
+
+        screen.fill(white)
+        screen.blit(ceucreditos,(0,0))    
+        mediumText = py.font.Font('freesansbold.ttf',25)
+        largeText = py.font.Font('freesansbold.ttf', 100)
+
+        TextSurf, TextRec = text_objects("Créditos", largeText)
+        TextSurf1, TextRec1 = text_objects("Guilherme Araújo Sette",mediumText)
+        TextSurf2, TextRec2 = text_objects("TIA: 41783441",mediumText)
+        TextSurf3, TextRec3 = text_objects("Luiz H. Monteiro de Carvalho",mediumText)
+        TextSurf4, TextRec4 = text_objects("TIA: 41719468",mediumText)
+
+        TextRec.center = ((display_width/2),(display_height/6))
+        TextRec1.center = ((display_width/2-200),(display_height/3))
+        TextRec2.center = ((display_width/2-200),(display_height/3+30))
+        TextRec3.center = ((display_width/2-200),(display_height/3+120))
+        TextRec4.center = ((display_width/2-200),(display_height/3+150))
+
+        screen.blit(TextSurf, TextRec)
+        screen.blit(TextSurf1, TextRec1)
+        screen.blit(TextSurf2, TextRec2)
+        screen.blit(TextSurf3, TextRec3)
+        screen.blit(TextSurf4, TextRec4)
+        
+        button("Back",50,500,100,50,purple,bright_purple,game_intro)
+        py.display.flip()
+        clock.tick(30)
+
+
 def quitgame():#função para sair do jogo normalmente chamada em botões
     py.quit()
     quit()
@@ -399,6 +437,7 @@ def game_intro():#função para o menu de introdução
         button("Customize",335,350,125,50,blue,bright_blue,game_customize)
         button("Instructions",325,450,150,50, yellow,bright_yellow,game_instruction)
         button("Quit",350,550,100,50, red, bright_red, quitgame)
+        button("Creditos",50,550,125,50,purple,bright_purple,game_creditos)
 
 
         py.display.flip()
