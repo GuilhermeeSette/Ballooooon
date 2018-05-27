@@ -1,4 +1,4 @@
-import pygame_textinput #importando arquivo para poder fazer o input para o ranking
+from music import pygame_textinput #importando arquivo para poder fazer o input para o ranking
 import pygame as py
 import time #importa tempo para regular a velocidade do jogo
 import random #importa random para randomizar a queda de objetos no jogo
@@ -78,9 +78,7 @@ def ranking():
 
         #print(num)
     fhand.sort(reverse = True)
-    for j in fhand:
-        print(j)
-
+    
 
 
     ranking = True
@@ -103,7 +101,7 @@ def ranking():
         disp = 200
         if len(fhand) < 5:
 
-            for line in range(0,len(fhand) -1,1):
+            for line in range(0,len(fhand) ,1):
                 largeText = py.font.Font('freesansbold.ttf', 20)
                 TextSurf, TextRec = text_objects(str(fhand[line]), largeText)
                 TextRec.center = ((display_width/2),disp)
@@ -130,8 +128,7 @@ def w_ranking(nome, dodge):#função para escrever pontos
 
 def r_ranking():#função para ler o arquivo
   texto = csv.reader(open("Bas.csv","r"))#abre arquivo
-  for row in texto:#for para ler linha por linha
-    print(row)#printa cada linha
+
 
 
 def input():#função para chamar a tela onde será colocado o seu nome
@@ -263,6 +260,7 @@ def game_instruction():#função para a pagina instrução
         TextSurf3, TextRec3 = text_objects("ao longo do tempo de jogo.",Stext)
         TextSurf4, TextRec4 = text_objects("A velocidade das agulhas aumenta gradativamente,",Stext)
         TextSurf5, TextRec5 = text_objects("cuidado!",Stext)
+        TextSurf6, TextRec6 = text_objects("Game over se chegar nos limites de cima e baixo da tela!",Stext)
 
         #Posição das variaveis
         TextRec.center = ((display_width/2),(display_height/6))#posição do texto 'Instruções' bem em cima da tela (por isso a altura dividida por 6)
@@ -271,6 +269,7 @@ def game_instruction():#função para a pagina instrução
         TextRec3.center = ((display_width/2),((display_height/3)+60))
         TextRec4.center = ((display_width/2),((display_height/3)+120))
         TextRec5.center = ((display_width/2),((display_height/3)+150))
+        TextRec6.center = ((display_width/2),((display_height/3)+180))
 
         #atualização de todos os textos
         screen.blit(TextSurf, TextRec)
@@ -279,6 +278,7 @@ def game_instruction():#função para a pagina instrução
         screen.blit(TextSurf3, TextRec3)
         screen.blit(TextSurf4, TextRec4)
         screen.blit(TextSurf5, TextRec5)
+        screen.blit(TextSurf6, TextRec6)
 
 
         #função de botões sendo usada
@@ -450,15 +450,15 @@ def game_loop():#o loop do jogo
 
     global dodge #deixando a variavel dodge em global para ser usada em outras funções como ranking
     dodge = 0
-    x = (display_width * 0.45)# tamanho do balão
-    y = (display_height * 0.8)
+    x = (display_width * 0.45)# posição inicial do balão
+    y = (display_height * 0.85)
 
     #variaveis
     x_change = 0 #mudança de x do balão
     y_change = 0 #mudança de y do balão
     bal_speed = 0 #velocidade do balão
     thing_startx = random.randrange(0, display_width)#posição x randomicamente, em um raio de 0 e indo até o valor total de largura da tela
-    thing_starty = -600 #caindo do começo da vida
+    thing_starty = -600 #caindo do começo da tela
     thing_speed = 10 #velocidade da agulha
     thing_width = 15 #largura da agulha
     thing_height = 70 #altura da agulha
@@ -490,15 +490,26 @@ def game_loop():#o loop do jogo
                     else:
                         x_change = 8#continua movendo para a direita
                 elif event.key == py.K_UP:#para subir
-                    y_change = -2#y é decrescido para o balão subir
+                    if y-bal_height < 0:
+                        y_change = 0
+                        crash()
+                    else:
+                        y_change = -1
+                        #y é decrescido para o balão subir
+                        
                 elif event.key == py.K_DOWN:#para descer
-                    y_change = 2#y é acrescido para descer
-
+                    if y +bal_height > display_height:
+                        y_change = 0
+                        crash()
+                    y_change = 2
+                    
             if event.type == py.KEYUP:#caso a tecla seja deixado de ser pressionado
                 if event.key == py.K_LEFT or event.key == py.K_RIGHT:#se as teclas de esquerda e direita forem deixadas de ser pressionadas
                     x_change = 0#a posição a ser calculada no eixo x é 0
+
                 elif event.key == py.K_UP or event.key == py.K_DOWN:#se as teclas de cima e baixo forem deixadas de ser pressionadas
                     y_change = 0#a posição a ser calculada no eixo y é 0
+
         x += x_change#movimento sendo calculado no final depois dos comandos
         y += y_change
 
